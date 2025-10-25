@@ -1,24 +1,55 @@
 import "../css/style.css"
 
-// Limpiar localStorage para probar carga de equipos predeterminados
-localStorage.clear();
+
 
 let container = document.getElementById("body-info");
 let equipos = JSON.parse(localStorage.getItem('equipos')) || [];
 
-// Equipos predeterminados
-const equiposPredeterminados = [
-  { nombre: 'Atletico bucaramanga', src: 'public/fotos equipos/atlBucaramanga.png' },
-  { nombre: 'Millonarios', src: 'public/fotos equipos/Millonarios-Futbol.png' },
-  { nombre: 'America de cali', src: 'public/fotos equipos/america.png' },
-  { nombre: 'Nacional', src: 'public/fotos equipos/nacional.png' }
+// Equipos predeterminados con rutas de imágenes
+const equiposPredeterminadosSrc = [
+  { nombre: 'Atletico bucaramanga', src: '/fotos equipos/atlBucaramanga.png' },
+  { nombre: 'Millonarios', src: '/fotos equipos/Millonarios-Futbol.png' },
+  { nombre: 'America de cali', src: '/fotos equipos/america.png' },
+  { nombre: 'Nacional', src: '/fotos equipos/nacional.png' }
 ];
 
-// Si no hay equipos en localStorage, cargar los predeterminados
-if (equipos.length === 0) {
-  equipos = [...equiposPredeterminados];
-  localStorage.setItem('equipos', JSON.stringify(equipos));
+// Función para convertir imagen de URL a base64
+async function convertImageToBase64(url) {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error('Error convirtiendo imagen a base64:', error);
+    return null;
+  }
 }
+
+// Función para inicializar equipos predeterminados
+async function initializeEquiposPredeterminados() {
+  if (equipos.length === 0) {
+    const equiposConBase64 = [];
+    for (const equipo of equiposPredeterminadosSrc) {
+      const base64 = await convertImageToBase64(equipo.src);
+      if (base64) {
+        equiposConBase64.push({
+          nombre: equipo.nombre,
+          base64: base64
+        });
+      }
+    }
+    equipos = [...equiposConBase64];
+    localStorage.setItem('equipos', JSON.stringify(equipos));
+  }
+}
+
+// Inicializar equipos predeterminados
+initializeEquiposPredeterminados();
 
 let editIndex = -1;
 let currentView = 'tabla'; // 'tabla' o 'gestion'
@@ -40,7 +71,7 @@ function tabla() {
           <tbody>
   `;
   equipos.forEach((equipo, index) => {
-    const imgSrc = equipo.src || `data:image/png;base64,${equipo.base64}`;
+    const imgSrc = `data:image/png;base64,${equipo.base64}`;
     html += `
       <tr class="bg-white/10 hover:bg-white/20 transition duration-300">
         <td class="p-1 md:p-2 lg:p-3 text-white text-center text-xs md:text-sm lg:text-base warp-break-words">${equipo.nombre}</td>
@@ -74,7 +105,7 @@ function gestion(){
           <tbody>
   `;
   equipos.forEach((equipo, index) => {
-    const imgSrc = equipo.src || `data:image/png;base64,${equipo.base64}`;
+    const imgSrc = `data:image/png;base64,${equipo.base64}`;
     html += `
       <tr class="bg-white/10 hover:bg-white/20 transition duration-300">
         <td class="p-1 md:p-2 lg:p-3 text-white text-center text-xs md:text-sm lg:text-base warp-break-words">${equipo.nombre}</td>
@@ -135,7 +166,7 @@ function gestion(){
   // Si estamos editando, precargar datos
   if (editIndex !== -1) {
     document.getElementById('nombre').value = equipos[editIndex].nombre;
-    const imgSrc = equipos[editIndex].src || `data:image/png;base64,${equipos[editIndex].base64}`;
+    const imgSrc = `data:image/png;base64,${equipos[editIndex].base64}`;
     document.getElementById('preview').innerHTML = `<img src="${imgSrc}" alt="Preview" class="w-12 h-12">`;
   }
 
