@@ -7,15 +7,26 @@
     <script type="module" src="./src/js/app.js" defer></script>
     <title>liga-betplay</title>
   </head>
-  <body>
-    <main class="m-0 p-0">
-      <header>
-        <div id="logo" class="">
-          
+  <body class="p-0 m-0 box-border">
+    <main id="main" class="bg-blue-800 min-w-screen min-h-screen">
+      <header id="header" 
+      class="relative bg-linear-to-t from-black/0 via-black/60 to-black w-screen h-auto flex justify-center py-6">
+        <div id="logo" class="flex h-auto w-[8vw] justify-center p-2">
+          <img src="./public/logoLigaBetPlay.png" width="150" alt="logoLigaBetPlay">
         </div>
       </header>
-      <section>
-        
+      <section id="content" class="flex flex-col items-center gap-2.5">
+        <nav class="w-screen">
+          <div id="btns" class="flex justify-around p-5 h-[15vh]">
+            <button id="btn-tabla" class="btns relative text-white px-[10vw]" onclick="">Tabla</button>
+            <button id="btn-gestion" class="btns relative text-white px-[10vw]" onclick="gestion()">Gestion</button>
+          </div>
+        </nav>
+
+        <div id="body-info" class="bg-white w-[90vw] border-4 shadow-black shadow-[5px 5px 50px]">
+          
+        </div>
+
       </section>
       <footer>
         

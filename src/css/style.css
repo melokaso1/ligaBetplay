@@ -1,9 +1,14 @@
 /* imports */
 @import 'tailwindcss';
 
-/* reset clasico */
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+@layer components{
+    .btns{
+        border-bottom:5px solid black;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        font-size: 1.5rem;
+    }
+    .btns:hover{
+        border-bottom: 10px solid rgb(239, 184, 16);
+    }
 }
