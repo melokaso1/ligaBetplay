@@ -4,26 +4,28 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-image" href="./public/logoLigaBetPlay.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script type="module" src="./src/js/app.js" defer></script>
     <title>liga-betplay</title>
   </head>
   <body class="p-0 m-0 box-border">
     <main id="main" class="bg-blue-800 min-w-screen min-h-screen">
-      <header id="header" 
-      class="relative bg-linear-to-t from-black/0 via-black/60 to-black w-screen h-auto flex justify-center py-6">
-        <div id="logo" class="flex h-auto w-[8vw] justify-center p-2">
-          <img src="./public/logoLigaBetPlay.png" width="150" alt="logoLigaBetPlay">
+      <header id="header"
+      class="relative bg-linear-to-t from-black/0 via-black/60 to-black w-screen h-auto flex flex-col items-center justify-center py-4 md:py-6 px-4">
+        <h1 class="text-white text-2xl md:text-3xl font-bold mb-4 text-center">Liga BetPlay</h1>
+        <div id="logo" class="flex h-auto w-20 md:w-32 lg:w-40 justify-center p-2">
+          <img src="/logoLigaBetPlay.png" class="w-full max-w-[150px]" alt="logoLigaBetPlay">
         </div>
       </header>
-      <section id="content" class="flex flex-col items-center gap-2.5">
-        <nav class="w-screen">
-          <div id="btns" class="flex justify-around p-5 h-[15vh]">
-            <button id="btn-tabla" class="btns relative text-white px-[10vw]" onclick="">Tabla</button>
-            <button id="btn-gestion" class="btns relative text-white px-[10vw]" onclick="gestion()">Gestion</button>
+      <section id="content" class="flex flex-col items-center gap-2.5 px-4">
+        <nav class="w-full max-w-4xl">
+        <div id="btns" class="flex justify-around p-2 md:p-3 lg:p-5 h-auto md:h-[12vh] lg:h-[15vh]">
+            <button id="btn-tabla" class="btns relative text-white px-2 md:px-4 lg:px-[10vw] text-xs md:text-sm lg:text-base" onclick="tabla()">Tabla</button>
+            <button id="btn-gestion" class="btns relative text-white px-2 md:px-4 lg:px-[10vw] text-xs md:text-sm lg:text-base" onclick="gestion()">Gestion</button>
           </div>
         </nav>
 
-        <div id="body-info" class="bg-white w-[90vw] border-4 shadow-black shadow-[5px 5px 50px]">
+        <div id="body-info" class="bg-white w-full max-w-4xl border-4 shadow-black shadow-[5px 5px 50px] mx-2 md:mx-4 p-0">
           
         </div>
 

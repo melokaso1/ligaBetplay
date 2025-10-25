@@ -1,5 +1,10 @@
 /* imports */
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+
+*{
+    font-family: "Pixelify Sans", sans-serif;
+}
 
 @layer components{
     .btns{
@@ -10,5 +15,97 @@
     }
     .btns:hover{
         border-bottom: 10px solid rgb(239, 184, 16);
+    }
+
+    .table-container {
+        background: linear-gradient(135deg, #1e3a8a, #0f172a);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .table-header {
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        color: #1e3a8a;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .table-row {
+        background: rgba(255,255,255,0.1);
+        transition: background 0.3s ease;
+    }
+
+    .table-row:hover {
+        background: rgba(255,255,255,0.2);
+    }
+
+    .form-container {
+        background: linear-gradient(135deg, #1e3a8a, #0f172a);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .form-input {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+        border-color: #fbbf24;
+        outline: none;
+    }
+
+    .form-input::placeholder {
+        color: rgba(255,255,255,0.7);
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        color: #1e3a8a;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-edit {
+        background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 3px;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+    }
+
+    .btn-edit:hover {
+        opacity: 0.8;
+    }
+
+    .btn-delete {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 3px;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+    }
+
+    .btn-delete:hover {
+        opacity: 0.8;
     }
 }
