@@ -1,10 +1,31 @@
 import "../css/style.css"
 
+// Limpiar localStorage para probar carga de equipos predeterminados
+localStorage.clear();
+
 let container = document.getElementById("body-info");
 let equipos = JSON.parse(localStorage.getItem('equipos')) || [];
+
+// Equipos predeterminados
+const equiposPredeterminados = [
+  { nombre: 'Atletico bucaramanga', src: 'public/fotos equipos/atlBucaramanga.png' },
+  { nombre: 'Millonarios', src: 'public/fotos equipos/Millonarios-Futbol.png' },
+  { nombre: 'America de cali', src: 'public/fotos equipos/america.png' },
+  { nombre: 'Nacional', src: 'public/fotos equipos/nacional.png' }
+];
+
+// Si no hay equipos en localStorage, cargar los predeterminados
+if (equipos.length === 0) {
+  equipos = [...equiposPredeterminados];
+  localStorage.setItem('equipos', JSON.stringify(equipos));
+}
+
 let editIndex = -1;
+let currentView = 'tabla'; // 'tabla' o 'gestion'
 
 function tabla() {
+  currentView = 'tabla';
+  updateButtonStyles();
   let html = `
     <div class="bg-linear-to-br from-blue-800 to-slate-900 p-2 md:p-4 lg:p-6 shadow-2xl">
       <h2 class="text-lg md:text-xl lg:text-2xl font-bold mb-4 text-white text-center">Tabla de Equipos</h2>
@@ -19,10 +40,11 @@ function tabla() {
           <tbody>
   `;
   equipos.forEach((equipo, index) => {
+    const imgSrc = equipo.src || `data:image/png;base64,${equipo.base64}`;
     html += `
       <tr class="bg-white/10 hover:bg-white/20 transition duration-300">
         <td class="p-1 md:p-2 lg:p-3 text-white text-center text-xs md:text-sm lg:text-base warp-break-words">${equipo.nombre}</td>
-        <td class="p-1 md:p-2 lg:p-3 flex justify-center"><img src="data:image/png;base64,${equipo.base64}" alt="Escudo" class="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 rounded-full border-2 border-yellow-400"></td>
+        <td class="p-1 md:p-2 lg:p-3 flex justify-center"><img src="${imgSrc}" alt="Escudo" class="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 rounded-full border-2 border-yellow-400"></td>
       </tr>
     `;
   });
@@ -36,6 +58,8 @@ function tabla() {
 }
 
 function gestion(){
+  currentView = 'gestion';
+  updateButtonStyles();
   let html = `
     <div class="bg-linear-to-br from-blue-800 to-slate-900 p-2 md:p-4 lg:p-6 shadow-2xl">
       <h2 class="text-lg md:text-xl lg:text-2xl font-bold mb-4 text-white text-center">Gestión de Equipos</h2>
@@ -50,11 +74,12 @@ function gestion(){
           <tbody>
   `;
   equipos.forEach((equipo, index) => {
+    const imgSrc = equipo.src || `data:image/png;base64,${equipo.base64}`;
     html += `
       <tr class="bg-white/10 hover:bg-white/20 transition duration-300">
-        <td class="p-1 md:p-2 lg:p-3 text-white text-center text-xs md:text-sm lg:text-base break-words">${equipo.nombre}</td>
+        <td class="p-1 md:p-2 lg:p-3 text-white text-center text-xs md:text-sm lg:text-base warp-break-words">${equipo.nombre}</td>
         <td class="p-1 md:p-2 lg:p-3 flex flex-col items-center gap-2">
-          <img src="data:image/png;base64,${equipo.base64}" alt="Escudo" class="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 rounded-full border-2 border-yellow-400">
+          <img src="${imgSrc}" alt="Escudo" class="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 rounded-full border-2 border-yellow-400">
           <div class="flex flex-col sm:flex-row gap-1">
             <button onclick="editar(${index})" class="bg-blue-500 hover:bg-blue-600 text-white px-1 md:px-2 lg:px-3 py-1 text-xs md:text-sm rounded transition duration-200">Editar</button>
             <button onclick="borrar(${index})" class="bg-red-500 hover:bg-red-600 text-white px-1 md:px-2 lg:px-3 py-1 text-xs md:text-sm rounded transition duration-200">Borrar</button>
@@ -110,7 +135,8 @@ function gestion(){
   // Si estamos editando, precargar datos
   if (editIndex !== -1) {
     document.getElementById('nombre').value = equipos[editIndex].nombre;
-    document.getElementById('preview').innerHTML = `<img src="data:image/png;base64,${equipos[editIndex].base64}" alt="Preview" class="w-12 h-12">`;
+    const imgSrc = equipos[editIndex].src || `data:image/png;base64,${equipos[editIndex].base64}`;
+    document.getElementById('preview').innerHTML = `<img src="${imgSrc}" alt="Preview" class="w-12 h-12">`;
   }
 
   // Event listener para el formulario
@@ -148,7 +174,11 @@ function guardarEquipo(nombre, base64) {
   }
   localStorage.setItem('equipos', JSON.stringify(equipos));
   alert('Equipo guardado correctamente');
-  gestion(); // Volver a la vista de gestión después de guardar para agregar otro equipo
+  if (currentView === 'gestion') {
+    gestion(); // Volver a la vista de gestión después de guardar para agregar otro equipo
+  } else {
+    tabla(); // Volver a la vista de tabla si se guardó desde ahí
+  }
 }
 
 function editar(index) {
@@ -160,13 +190,27 @@ function borrar(index) {
   if (confirm('¿Estás seguro de que quieres borrar este equipo?')) {
     equipos.splice(index, 1);
     localStorage.setItem('equipos', JSON.stringify(equipos));
-    tabla();
+    if (currentView === 'gestion') {
+      gestion();
+    } else {
+      tabla();
+    }
   }
 }
 
 function cancelarEdicion() {
   editIndex = -1;
   gestion();
+}
+
+// Función para actualizar estilos de botones
+function updateButtonStyles() {
+  const btnTabla = document.getElementById('btn-tabla');
+  const btnGestion = document.getElementById('btn-gestion');
+  if (btnTabla && btnGestion) {
+    btnTabla.classList.toggle('active', currentView === 'tabla');
+    btnGestion.classList.toggle('active', currentView === 'gestion');
+  }
 }
 
 // Hacer funciones globales para onclick en HTML
